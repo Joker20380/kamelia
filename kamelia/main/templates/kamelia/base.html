@@ -33,7 +33,7 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active"><a href="{% url 'index' %}" class="nav-link">Домой</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Номера</a></li>
+          <li class="nav-item"><a href="{% url 'rooms' %}" class="nav-link">Номера</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Услуги</a></li>
           <li class="nav-item"><a href="#" class="nav-link">О нас</a></li>
           <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Блог</a></li>
@@ -43,8 +43,17 @@
     </div>
   </nav>
   <!-- END nav -->
-  
+  {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mb-2" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
 {% block content %}
+
 
 {% endblock %}
   
@@ -126,6 +135,55 @@
   <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
   <script src="{% static 'js/google-map.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  
+<script>
+(function ($) {
+  function initBookingDatepickers() {
+    if (!$.fn.datepicker) return;
+
+    function toISO(d) {
+      return d.getFullYear() + '-' +
+        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+        String(d.getDate()).padStart(2, '0');
+    }
+
+    $('#checkin_date_display').datepicker({
+      format: 'dd MM, yyyy',
+      autoclose: true,
+      todayHighlight: true,
+      weekStart: 1,
+      language: 'en'
+    }).on('changeDate', function (e) {
+      const d = e.date;
+      $('#checkin_date').val(toISO(d));
+
+      const minOut = new Date(d.getTime());
+      minOut.setDate(minOut.getDate() + 1);
+
+      $('#checkout_date_display')
+        .datepicker('setStartDate', minOut)
+        .datepicker('setDate', minOut);
+
+      $('#checkout_date').val(toISO(minOut));
+    });
+
+    $('#checkout_date_display').datepicker({
+      format: 'dd MM, yyyy',
+      autoclose: true,
+      todayHighlight: true,
+      weekStart: 1,
+      language: 'en'
+    }).on('changeDate', function (e) {
+      $('#checkout_date').val(toISO(e.date));
+    });
+  }
+
+  $(document).ready(initBookingDatepickers);
+})(jQuery);
+</script>
+
+
+
     
   </body>
 </html>

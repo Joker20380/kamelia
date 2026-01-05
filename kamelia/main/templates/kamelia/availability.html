@@ -1,0 +1,98 @@
+{% extends 'kamelia/base.html' %}
+{% load static %}
+
+{% block title %}Наличие мест{% endblock %}
+
+{% block content %}
+<section class="ftco-section bg-light">
+  <div class="container">
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-10">
+        <h2 class="mb-3">Проверка наличия</h2>
+
+        <form method="get" action="{% url 'availability' %}" class="block-32">
+          <div class="row">
+            <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
+              <label>Регистрация</label>
+              <div class="field-icon-wrap">
+                <div class="icon"><span class="icon-calendar"></span></div>
+                {{ form.checkin }}
+              </div>
+              {% for e in form.checkin.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+
+            <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
+              <label>Выезд</label>
+              <div class="field-icon-wrap">
+                <div class="icon"><span class="icon-calendar"></span></div>
+                {{ form.checkout }}
+              </div>
+              {% for e in form.checkout.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+
+            <div class="col-md-6 mb-3 mb-md-0 col-lg-3">
+              <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label>Взрослые</label>
+                  {{ form.adults }}
+                </div>
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label>Дети</label>
+                  {{ form.children }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 align-self-end">
+              <button class="btn btn-primary btn-block">Наличие мест</button>
+            </div>
+          </div>
+
+          {% if form.non_field_errors %}
+            <div class="text-danger mt-2">
+              {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+            </div>
+          {% endif %}
+        </form>
+
+      </div>
+    </div>
+
+    <div class="row">
+      {% for r in rooms %}
+        <div class="col-md-4 d-flex ftco-animate">
+          <div class="blog-entry align-self-stretch">
+            <a href="{{ r.get_absolute_url }}" class="block-20" style="
+              background-image: url(
+                {% if r.photo %}{{ r.photo.url }}{% else %}{% static 'images/img_1.jpg' %}{% endif %}
+              );
+            "></a>
+
+            <div class="text p-4">
+              <h3 class="heading mt-3"><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></h3>
+              <p class="mb-2 text-muted">Номер {{ r.number }} • {{ r.category.title }}</p>
+
+              <p class="mb-2"><strong>{{ r.price }} {{ r.currency }}</strong> / ночь</p>
+
+              <p>
+                <a class="btn btn-primary py-2 px-3"
+                   href="{% url 'booking_create' r.slug %}?checkin={{ form.checkin.value }}&checkout={{ form.checkout.value }}&adults={{ form.adults.value }}&children={{ form.children.value }}">
+                  Забронировать
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">Нет доступных номеров по выбранным параметрам.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+{% endblock %}

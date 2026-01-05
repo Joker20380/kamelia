@@ -1,0 +1,12 @@
+{% extends 'kamelia/base.html' %}
+{% block title %}Заявка принята{% endblock %}
+
+{% block content %}
+<section class="ftco-section">
+  <div class="container text-center">
+    <h2 class="mb-3">Заявка на бронирование принята</h2>
+    <p class="text-muted">Мы свяжемся с вами в ближайшее время для подтверждения.</p>
+    <p><a href="{% url 'index' %}" class="btn btn-primary py-3 px-4">На главную</a></p>
+  </div>
+</section>
+{% endblock %}

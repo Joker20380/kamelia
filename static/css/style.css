@@ -8866,3 +8866,20 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+
+/* FIX: room gallery visibility */
+.room-gallery .item {
+  position: relative;
+}
+
+.room-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* если owl схлопывается */
+.room-gallery .owl-stage-outer {
+  overflow: hidden;
+}

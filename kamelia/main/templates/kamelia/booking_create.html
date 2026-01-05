@@ -1,0 +1,63 @@
+{% extends 'kamelia/base.html' %}
+{% load static %}
+
+{% block title %}Бронирование — {{ room.title }}{% endblock %}
+
+{% block content %}
+<section class="ftco-section">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-lg-7">
+        <h2 class="mb-3">Бронирование</h2>
+        <p class="text-muted">
+          {{ room.title }} (номер {{ room.number }})<br>
+          Заезд: <strong>{{ checkin }}</strong> • Выезд: <strong>{{ checkout }}</strong><br>
+          Гости: <strong>{{ adults }}</strong> взрослые{% if children %} + <strong>{{ children }}</strong> дети{% endif %}<br>
+          Ночей: <strong>{{ nights }}</strong>
+        </p>
+
+        <form method="post" class="p-4 bg-light">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label>Имя</label>
+            {{ form.guest_name }}
+            {% for e in form.guest_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+
+          <div class="form-group">
+            <label>Телефон</label>
+            {{ form.guest_phone }}
+            {% for e in form.guest_phone.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            {{ form.guest_email }}
+            {% for e in form.guest_email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+
+          <div class="form-group">
+            <label>Комментарий</label>
+            {{ form.comment }}
+          </div>
+
+          <button class="btn btn-primary btn-block py-3">Отправить заявку</button>
+        </form>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="p-4 bg-light">
+          <h3 class="mb-3">Итого</h3>
+          <p class="h4">{{ total }} {{ room.currency }}</p>
+          <p class="text-muted mb-0">
+            Оплата производится при заселении (или по согласованию с администратором).
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
