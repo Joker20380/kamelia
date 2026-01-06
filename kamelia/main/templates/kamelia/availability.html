@@ -11,50 +11,94 @@
       <div class="col-md-10">
         <h2 class="mb-3">Проверка наличия</h2>
 
-        <form method="get" action="{% url 'availability' %}" class="block-32">
-          <div class="row">
-            <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
-              <label>Регистрация</label>
-              <div class="field-icon-wrap">
-                <div class="icon"><span class="icon-calendar"></span></div>
-                {{ form.checkin }}
-              </div>
-              {% for e in form.checkin.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
-            </div>
+                <div class="block-32">
+  <form method="get" action="{% url 'availability' %}">
 
-            <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
-              <label>Выезд</label>
-              <div class="field-icon-wrap">
-                <div class="icon"><span class="icon-calendar"></span></div>
-                {{ form.checkout }}
-              </div>
-              {% for e in form.checkout.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
-            </div>
+    <div class="row">
 
-            <div class="col-md-6 mb-3 mb-md-0 col-lg-3">
-              <div class="row">
-                <div class="col-md-6 mb-3 mb-md-0">
-                  <label>Взрослые</label>
-                  {{ form.adults }}
-                </div>
-                <div class="col-md-6 mb-3 mb-md-0">
-                  <label>Дети</label>
-                  {{ form.children }}
-                </div>
-              </div>
-            </div>
+      <!-- ЗАЕЗД -->
+      <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
+        <label>Регистрация</label>
+        <div class="field-icon-wrap">
+          <div class="icon"><span class="icon-calendar"></span></div>
 
-            <div class="col-md-6 col-lg-3 align-self-end">
-              <button class="btn btn-primary btn-block">Наличие мест</button>
+          <!-- Видимое поле -->
+          <input type="text"
+                 id="checkin_date_display"
+                 class="form-control"
+                 autocomplete="off"
+                 placeholder="Выберите дату">
+
+          <!-- Скрытое поле для Django -->
+          <input type="hidden"
+                 name="checkin"
+                 id="checkin_date">
+        </div>
+      </div>
+
+      <!-- ВЫЕЗД -->
+      <div class="col-md-6 mb-3 mb-lg-0 col-lg-3">
+        <label>Выезд</label>
+        <div class="field-icon-wrap">
+          <div class="icon"><span class="icon-calendar"></span></div>
+
+          <!-- Видимое поле -->
+          <input type="text"
+                 id="checkout_date_display"
+                 class="form-control"
+                 autocomplete="off"
+                 placeholder="Выберите дату">
+
+          <!-- Скрытое поле для Django -->
+          <input type="hidden"
+                 name="checkout"
+                 id="checkout_date">
+        </div>
+      </div>
+
+      <!-- ГОСТИ -->
+      <div class="col-md-6 mb-3 mb-md-0 col-lg-3">
+        <div class="row">
+
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label>Взрослые</label>
+            <div class="field-icon-wrap">
+              <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+              <select name="adults" class="form-control">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5+</option>
+              </select>
             </div>
           </div>
 
-          {% if form.non_field_errors %}
-            <div class="text-danger mt-2">
-              {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label>Дети</label>
+            <div class="field-icon-wrap">
+              <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+              <select name="children" class="form-control">
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4+</option>
+              </select>
             </div>
-          {% endif %}
-        </form>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- КНОПКА -->
+      <div class="col-md-6 col-lg-3 align-self-end">
+        <button class="btn btn-primary btn-block">Наличие мест</button>
+      </div>
+
+    </div>
+  </form>
+</div>
 
       </div>
     </div>
@@ -63,11 +107,14 @@
       {% for r in rooms %}
         <div class="col-md-4 d-flex ftco-animate">
           <div class="blog-entry align-self-stretch">
-            <a href="{{ r.get_absolute_url }}" class="block-20" style="
-              background-image: url(
-                {% if r.photo %}{{ r.photo.url }}{% else %}{% static 'images/img_1.jpg' %}{% endif %}
-              );
-            "></a>
+				<a href="{{ r.get_absolute_url }}"
+				   class="block-20 d-block"
+				   style="background-image: url('{% if r.photo %}{{ r.photo.url }}{% else %}{% static 'images/img_1.jpg' %}{% endif %}');
+				          height: 220px;
+				          background-size: cover;
+				          background-position: center;">
+				</a>
+
 
             <div class="text p-4">
               <h3 class="heading mt-3"><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></h3>
@@ -96,3 +143,41 @@
 
 
 {% endblock %}
+
+{% block extra_js %}
+<script>
+(function ($) {
+  $(function () {
+    // bootstrap-datepicker.js (не jquery-ui datepicker!)
+    var $checkin = $('#checkin_date');
+    var $checkout = $('#checkout_date');
+
+    function init($el) {
+      if (!$el.length) return;
+      if (!$.fn.datepicker) return;
+
+      $el.datepicker('destroy'); // на всякий случай
+      $el.datepicker({
+        format: 'yyyy-mm-dd',     // КЛЮЧ: формат в инпут
+        autoclose: true,
+        todayHighlight: true
+      });
+    }
+
+    init($checkin);
+    init($checkout);
+
+    // дополнительная защита: если кто-то другой форматирует дату словами
+    // просто не позволяем "January" и т.п.
+    $('#checkin_date, #checkout_date').on('change', function () {
+      var v = (this.value || '').trim();
+      // если не похоже на YYYY-MM-DD — чистим, чтобы юзер выбрал заново
+      if (v && !/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+        this.value = '';
+      }
+    });
+  });
+})(jQuery);
+</script>
+{% endblock %}
+

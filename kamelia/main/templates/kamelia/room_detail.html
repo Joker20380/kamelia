@@ -6,43 +6,47 @@
 
 {% block content %}
 
-  <div class="block-31" style="position: relative;">
-    <div class="owl-carousel loop-block-31 ">
-      <div class="block-30 item" style="background-image: url('{% static 'images/bg_2.jpg' %}');" data-stellar-background-ratio="0.5">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-10">
-              <span class="subheading-sm">Добро пожаловать</span>
-              <h2 class="heading">Насладитесь роскошным отдыхом</h2>
-              <p><a href="#" class="btn py-4 px-5 btn-primary">Узнать больше</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="block-30 item" style="background-image: url('{% static 'images/bg_1.jpg' %}');" data-stellar-background-ratio="0.5">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-10">
-              <span class="subheading-sm">Добро пожаловать</span>
-              <h2 class="heading">Простота и элегантность</h2>
-              <p><a href="#" class="btn py-4 px-5 btn-primary">Узнать больше</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="block-30 item" style="background-image: url('{% static 'images/bg_3.jpg' %}');" data-stellar-background-ratio="0.5">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-10">
-              <span class="subheading-sm">Добро пожаловать</span>
-              <h2 class="heading">Еда и напитки</h2>
-              <p><a href="#" class="btn py-4 px-5 btn-primary">Узнать больше</a></p>
-            </div>
+{# Верхняя карусель — ТОЛЬКО ДЕСКТОП (скрыта на xs/sm) #}
+<div class="block-31 d-none d-md-block" style="position: relative;">
+  <div class="owl-carousel loop-block-31">
+    <div class="block-30 item" style="background-image: url('{% static 'images/bg_2.jpg' %}');" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-10">
+            <span class="subheading-sm">Добро пожаловать</span>
+            <h2 class="heading">Насладитесь роскошным отдыхом</h2>
+            <p><a href="#" class="btn py-4 px-5 btn-primary">Узнать больше</a></p>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="block-30 item" style="background-image: url('{% static 'images/bg_1.jpg' %}');" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-10">
+            <span class="subheading-sm">Добро пожаловать</span>
+            <h2 class="heading">Простота и элегантность</h2>
+            <p><a href="#" class="btn py-4 px-5 btn-primary">Узнать больше</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-30 item" style="background-image: url('{% static 'images/bg_3.jpg' %}');" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-10">
+            <span class="subheading-sm">Добро пожаловать</span>
+            <h2 class="heading">Еда и напитки</h2>
+            <p><a href="#" class="btn py-4 px-5 btn-primary">Узнать больше</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
 
 <section class="ftco-section ftco-degree-bg">
   <div class="container">
@@ -58,76 +62,64 @@
         </p>
 
         <h2 class="mb-3">{{ room.title }}</h2>
+
         <p class="text-muted mb-4">
           Номер: <strong>{{ room.number }}</strong>
           {% if room.category %} • Категория: <strong>{{ room.category.title }}</strong>{% endif %}
         </p>
 
-{# Галерея #}
-<div class="mb-4">
-  <div class="owl-carousel room-gallery owl-theme">
+        {# Галерея фото номера #}
+        <div class="mb-4">
+          <div class="owl-carousel room-gallery owl-theme">
 
-    {% if room.photo %}
-      <div class="item">
-        <a href="{{ room.photo.url }}" class="image-popup d-block">
-          <img src="{{ room.photo.url }}"
-               alt="{{ room.title }}"
-               class="img-fluid w-100">
-        </a>
-      </div>
-    {% endif %}
+            {% if room.photo %}
+              <div class="item">
+                <a href="{{ room.photo.url }}" class="image-popup d-block">
+                  <img src="{{ room.photo.url }}" alt="{{ room.title }}" class="img-fluid w-100">
+                </a>
+              </div>
+            {% endif %}
 
-    {% if room.photo2 %}
-      <div class="item">
-        <a href="{{ room.photo2.url }}" class="image-popup d-block">
-          <img src="{{ room.photo2.url }}"
-               alt="{{ room.title }}"
-               class="img-fluid w-100">
-        </a>
-      </div>
-    {% endif %}
+            {% if room.photo2 %}
+              <div class="item">
+                <a href="{{ room.photo2.url }}" class="image-popup d-block">
+                  <img src="{{ room.photo2.url }}" alt="{{ room.title }}" class="img-fluid w-100">
+                </a>
+              </div>
+            {% endif %}
 
-    {% if room.photo3 %}
-      <div class="item">
-        <a href="{{ room.photo3.url }}" class="image-popup d-block">
-          <img src="{{ room.photo3.url }}"
-               alt="{{ room.title }}"
-               class="img-fluid w-100">
-        </a>
-      </div>
-    {% endif %}
+            {% if room.photo3 %}
+              <div class="item">
+                <a href="{{ room.photo3.url }}" class="image-popup d-block">
+                  <img src="{{ room.photo3.url }}" alt="{{ room.title }}" class="img-fluid w-100">
+                </a>
+              </div>
+            {% endif %}
 
-    {% if room.photo4 %}
-      <div class="item">
-        <a href="{{ room.photo4.url }}" class="image-popup d-block">
-          <img src="{{ room.photo4.url }}"
-               alt="{{ room.title }}"
-               class="img-fluid w-100">
-        </a>
-      </div>
-    {% endif %}
+            {% if room.photo4 %}
+              <div class="item">
+                <a href="{{ room.photo4.url }}" class="image-popup d-block">
+                  <img src="{{ room.photo4.url }}" alt="{{ room.title }}" class="img-fluid w-100">
+                </a>
+              </div>
+            {% endif %}
 
-    {% if room.photo5 %}
-      <div class="item">
-        <a href="{{ room.photo5.url }}" class="image-popup d-block">
-          <img src="{{ room.photo5.url }}"
-               alt="{{ room.title }}"
-               class="img-fluid w-100">
-        </a>
-      </div>
-    {% endif %}
+            {% if room.photo5 %}
+              <div class="item">
+                <a href="{{ room.photo5.url }}" class="image-popup d-block">
+                  <img src="{{ room.photo5.url }}" alt="{{ room.title }}" class="img-fluid w-100">
+                </a>
+              </div>
+            {% endif %}
 
-    {% if not room.photo and not room.photo2 and not room.photo3 and not room.photo4 and not room.photo5 %}
-      <div class="item">
-        <img src="{% static 'images/img_1.jpg' %}"
-             alt="Нет фото"
-             class="img-fluid w-100">
-      </div>
-    {% endif %}
+            {% if not room.photo and not room.photo2 and not room.photo3 and not room.photo4 and not room.photo5 %}
+              <div class="item">
+                <img src="{% static 'images/img_1.jpg' %}" alt="Нет фото" class="img-fluid w-100">
+              </div>
+            {% endif %}
 
-  </div>
-</div>
-
+          </div>
+        </div>
 
         {# Описание #}
         {% if room.content %}
@@ -163,8 +155,13 @@
             <h4 class="mb-3">Удобства</h4>
             <div class="row">
               {% for a in room.amenities.all %}
-                <div class="col-md-6 mb-2">
-                  <span class="icon-check text-primary mr-2"></span>{{ a.title }}
+                <div class="col-md-6 mb-2 d-flex align-items-center">
+                  {% if a.icon %}
+                    <span class="{{ a.icon }} text-primary mr-2" style="font-size:18px;"></span>
+                  {% else %}
+                    <span class="icon-check text-primary mr-2"></span>
+                  {% endif %}
+                  <span>{{ a.title }}</span>
                 </div>
               {% endfor %}
             </div>
@@ -178,15 +175,14 @@
             {% for r in similar_rooms %}
               <div class="col-md-4 d-flex ftco-animate">
                 <div class="blog-entry align-self-stretch">
-                  <a href="{{ r.get_absolute_url }}" class="block-20" style="
-                    background-image: url(
-                      {% if r.photo %}{{ r.photo.url }}{% else %}{% static 'images/img_1.jpg' %}{% endif %}
-                    );
-                  ">
+                  <a href="{{ r.get_absolute_url }}"
+                     class="block-20 d-block"
+                     style="background-image: url('{% if r.photo %}{{ r.photo.url }}{% else %}{% static 'images/img_1.jpg' %}{% endif %}');
+                            height: 220px; background-size: cover; background-position: center;">
                   </a>
                   <div class="text p-4">
                     <h3 class="heading mt-3"><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></h3>
-                    <p class="mb-2 text-muted">Номер {{ r.number }} • {{ r.category.title }}</p>
+                    <p class="mb-2 text-muted">Номер {{ r.number }}{% if r.category %} • {{ r.category.title }}{% endif %}</p>
                     <p><a href="{{ r.get_absolute_url }}" class="btn btn-primary py-2 px-3">Подробнее</a></p>
                   </div>
                 </div>
@@ -197,7 +193,7 @@
 
       </div>
 
-      {# Правая колонка: цена/бронирование #}
+      {# Правая колонка: цена/контакты #}
       <div class="col-lg-4 sidebar ftco-animate">
         <div class="sidebar-box bg-light p-4">
           <h3 class="mb-3">Цена</h3>
@@ -211,10 +207,11 @@
           </p>
 
           <p>
-            <a href="{% url 'contacts' %}" class="btn btn-primary btn-block py-3">Забронировать</a>
+            <a href="{% url 'booking_create' room.slug %}" class="btn btn-primary btn-block py-3">Забронировать</a>
           </p>
 
           <hr>
+
           <p class="mb-0">
             <a href="tel:+78672518600" class="btn btn-outline-primary btn-block py-3">
               Позвонить
@@ -227,36 +224,44 @@
   </div>
 </section>
 
+{% endblock %}
+
+{# ВАЖНО: скрипты должны идти ПОСЛЕ подключения jquery/owl в base.html #}
+{% block extra_js %}
 <script>
 (function ($) {
-  $(document).ready(function () {
+  $(function () {
 
-    const $gallery = $('.room-gallery');
+    var $gallery = $('.room-gallery');
 
-    if ($gallery.length && $.fn.owlCarousel) {
+    if (!$gallery.length) return;
 
-      // защита от повторной инициализации
-      if ($gallery.hasClass('owl-loaded')) {
-        $gallery.trigger('destroy.owl.carousel');
-        $gallery.removeClass('owl-loaded');
-      }
-
-      $gallery.owlCarousel({
-        items: 1,
-        loop: true,
-        nav: true,
-        dots: true,
-        autoplay: true,
-        autoplayTimeout: 5000,
-        navText: [
-          '<span class="icon-chevron-left"></span>',
-          '<span class="icon-chevron-right"></span>'
-        ]
-      });
+    // fallback: если owl не подгрузился — просто оставляем картинки как список
+    if (!$.fn.owlCarousel) {
+      $gallery.removeClass('owl-carousel owl-theme');
+      return;
     }
 
+    if ($gallery.hasClass('owl-loaded')) {
+      $gallery.trigger('destroy.owl.carousel');
+      $gallery.removeClass('owl-loaded');
+    }
+
+    $gallery.owlCarousel({
+      items: 1,
+      loop: true,
+      nav: true,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 5000,
+      navText: [
+        '<span class="icon-chevron-left"></span>',
+        '<span class="icon-chevron-right"></span>'
+      ]
+    });
+
     if ($.fn.magnificPopup) {
-      $('.image-popup').magnificPopup({
+      $gallery.find('.image-popup').magnificPopup({
         type: 'image',
         gallery: { enabled: true }
       });
@@ -265,6 +270,4 @@
   });
 })(jQuery);
 </script>
-
-
 {% endblock %}

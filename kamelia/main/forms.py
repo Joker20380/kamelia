@@ -27,38 +27,47 @@ class UnsubscriberForm(forms.Form):
     )
     
 
+
 class AvailabilitySearchForm(forms.Form):
     checkin = forms.DateField(
         label="Заезд",
-        input_formats=["%Y-%m-%d"],  # ✅ ключевое
-        widget=forms.DateInput(attrs={
-            "class": "form-control",
-            "id": "checkin_date",
-            "autocomplete": "off",
-            "placeholder": "YYYY-MM-DD",
-        })
+        input_formats=["%Y-%m-%d"],
+        widget=forms.DateInput(
+            format="%Y-%m-%d",
+            attrs={
+                "class": "form-control js-date",
+                "id": "checkin_date",
+                "autocomplete": "off",
+                "placeholder": "YYYY-MM-DD",
+                "type": "text",
+            }
+        )
     )
     checkout = forms.DateField(
         label="Выезд",
-        input_formats=["%Y-%m-%d"],  # ✅ ключевое
-        widget=forms.DateInput(attrs={
-            "class": "form-control",
-            "id": "checkout_date",
-            "autocomplete": "off",
-            "placeholder": "YYYY-MM-DD",
-        })
+        input_formats=["%Y-%m-%d"],
+        widget=forms.DateInput(
+            format="%Y-%m-%d",
+            attrs={
+                "class": "form-control js-date",
+                "id": "checkout_date",
+                "autocomplete": "off",
+                "placeholder": "YYYY-MM-DD",
+                "type": "text",
+            }
+        )
     )
     adults = forms.IntegerField(
         label="Взрослые",
         min_value=1,
         initial=2,
-        widget=forms.NumberInput(attrs={"class": "form-control"})
+        widget=forms.NumberInput(attrs={"class": "form-control", "min": 1})
     )
     children = forms.IntegerField(
         label="Дети",
         min_value=0,
         initial=0,
-        widget=forms.NumberInput(attrs={"class": "form-control"})
+        widget=forms.NumberInput(attrs={"class": "form-control", "min": 0})
     )
 
     def clean(self):
@@ -68,6 +77,7 @@ class AvailabilitySearchForm(forms.Form):
         if checkin and checkout and checkout <= checkin:
             raise forms.ValidationError("Дата выезда должна быть позже даты заезда.")
         return cleaned
+
 
 
 
