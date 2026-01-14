@@ -11,9 +11,6 @@ from django.db.models import Q
 from django.db import transaction
 from django.urls import reverse
 
-
-
-
 # Локальные импорты
 from .models import *
 from .utils import *
@@ -27,7 +24,7 @@ class YandexView(TemplateView):
 class RobotsTxtView(TemplateView):
     template_name = 'robots.txt'
     content_type = 'text/plain'
-        
+
 
 class Index(DataMixin, ListView):
     queryset = News.objects.order_by('-time_update')
@@ -35,40 +32,50 @@ class Index(DataMixin, ListView):
     template_name = 'kamelia/index.html'
     context_object_name = 'news'
     paginate_by = 6
-    
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Домой")
         return dict(list(context.items()) + list(c_def.items()))
-        
+
     @staticmethod
     def all_news():
-    	all_news = News.objects.order_by('-time_create')
-    	return all_news
+        all_news = News.objects.order_by('-time_create')
+        return all_news
+
+    @staticmethod
+    def post_last3():
+        post_last3 = News.objects.reverse()[:3]
+        return post_last3
 
 
 class Blog(DataMixin, ListView):
-	queryset = News.objects.all().reverse()
-	template_name = "kamelia/blog.html"
-	model = News
-	context_object_name = 'news'
-	paginate_by = 9
-    
-    	
-	def get_context_data(self, *, object_list=None, **kwargs):
-		context = super().get_context_data(**kwargs)
-		c_def = self.get_user_context(title="Новости")
-		return dict(list(context.items()) + list(c_def.items()))
-    
-	@staticmethod
-	def news_all():
-		news_all = News.objects.all().reverse()
-		return news_all
-		
-	@staticmethod
-	def all_news():
-		all_news = News.objects.order_by('-time_create')
-		return all_news
+    queryset = News.objects.all().reverse()
+    template_name = "kamelia/blog.html"
+    model = News
+    context_object_name = 'news'
+    paginate_by = 9
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Новости")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    @staticmethod
+    def news_all():
+        news_all = News.objects.all().reverse()
+        return news_all
+
+    @staticmethod
+    def all_news():
+        all_news = News.objects.order_by('-time_create')
+        return all_news
+
+
+    @staticmethod
+    def post_last3():
+        post_last3 = News.objects.reverse()[:3]
+        return post_last3
 
 
 class ShowNews(DataMixin, DetailView):
@@ -92,12 +99,12 @@ class ShowNews(DataMixin, DetailView):
     def post_last6():
         post_last6 = News.objects.reverse()[:6]
         return post_last6
-    
+
     @staticmethod
     def all_news():
-    	all_news = News.objects.order_by('-time_create')
-    	return all_news
-		
+        all_news = News.objects.order_by('-time_create')
+        return all_news
+
 
 class ContactsView(TemplateView):
     template_name = 'kamelia/contacts.html'
@@ -109,7 +116,6 @@ class ContactsView(TemplateView):
             'main_contact': main_contact,
             'contact_groups': ContactGroup.objects.prefetch_related('contacts').all(),
         })
-
 
         return context
 
@@ -139,23 +145,32 @@ class ContactsView(TemplateView):
 
         messages.success(request, 'Ваше сообщение успешно отправлено!')
         return redirect('contacts')
-        
+
     @staticmethod
     def all_news():
-    	all_news = News.objects.order_by('-time_create')
-    	return all_news
-    	
+        all_news = News.objects.order_by('-time_create')
+        return all_news
+
+    @staticmethod
+    def post_last3():
+        post_last3 = News.objects.reverse()[:3]
+        return post_last3
+
 
 class Conf(ListView):
     queryset = News.objects.all()
     template_name = "kamelia/conf.html"
     model = News
-    
-    
+
     @staticmethod
     def news_all_conf():
-        news_all_conf = News.objects.filter(title= 'Политика конфиденциальности')
+        news_all_conf = News.objects.filter(title='Политика конфиденциальности')
         return news_all_conf
+
+    @staticmethod
+    def post_last3():
+        post_last3 = News.objects.reverse()[:3]
+        return post_last3
 
 
 class RoomListView(ListView):
@@ -178,6 +193,11 @@ class RoomListView(ListView):
         ctx["categories"] = RoomCategory.objects.filter(is_published=True).order_by("order", "id")
         return ctx
 
+    @staticmethod
+    def post_last3():
+        post_last3 = News.objects.reverse()[:3]
+        return post_last3
+
 
 class RoomDetailView(DetailView):
     model = Room
@@ -196,10 +216,10 @@ class RoomDetailView(DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx["all_news"] = News.objects.filter(is_published=True).order_by("-time_create")[:3]
         ctx["similar_rooms"] = (Room.objects
-                                .filter(is_published=True, category=self.object.category)
-                                .exclude(id=self.object.id)
-                                .exclude(status=Room.STATUS_INACTIVE)
-                                .order_by("number")[:3])
+        .filter(is_published=True, category=self.object.category)
+        .exclude(id=self.object.id)
+        .exclude(status=Room.STATUS_INACTIVE)
+        .order_by("number")[:3])
         return ctx
 
 
@@ -349,4 +369,3 @@ def booking_success_view(request):
     ctx = {}
     ctx.update(_news_footer_ctx())
     return render(request, "kamelia/booking_success.html", ctx)
-        
